@@ -1,0 +1,16 @@
+prombeat:
+  address: http://localhost:32768
+  period: 10s
+  queries:
+    - name: http_requests
+      query: sum(http_requests_total{instance="localhost:9090",job="prometheus"})
+    - name: http_request_rate
+      query: rate(http_requests_total{instance="localhost:9090",job="prometheus"}[5m])
+    - name: prometheus_memory_series
+      query: scalar(prometheus_local_storage_memory_series)
+    - name: gc_duration
+      query: go_gc_duration_seconds{quantile="0.5"}[20s]
+
+output:
+  console:
+    pretty: true
