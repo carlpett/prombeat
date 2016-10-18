@@ -70,7 +70,11 @@ func (bt *Prombeat) Run(b *beat.Beat) error {
         for _, query := range bt.config.Queries {
             wg.Add(1)
             go func(query config.Query) {
-                bt.executeQuery(query, ctx)
+                err := bt.executeQuery(query, ctx)
+                if err != nil {
+                    logp.Warn("%v", err)
+                }
+
                 wg.Done()
             }(query)
         }
@@ -81,7 +85,7 @@ func (bt *Prombeat) Run(b *beat.Beat) error {
 func (bt *Prombeat) executeQuery(query config.Query, ctx context.Context) error {
     val, err := bt.promQueryClient.Query(ctx, query.Query, time.Now())
     if err != nil {
-        return fmt.Errorf("Uhoh: %v\n", err)
+        return fmt.Errorf("Query %s returned an error from Prometheus: %v\n", query.Name, err)
     }
 
     sentEvents := 0
