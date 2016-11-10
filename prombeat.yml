@@ -5,6 +5,8 @@ prombeat:
       query: sum(http_requests_total{instance="localhost:9090",job="prometheus"})
     - name: http_request_rate
       query: rate(http_requests_total{instance="localhost:9090",job="prometheus"}[5m])
+  matchers:
+    - http_requests_total{instance="localhost:9090",job="prometheus",method="get"}
 
 output:
   console:
