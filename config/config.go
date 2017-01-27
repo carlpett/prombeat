@@ -5,9 +5,10 @@ import (
 )
 
 type Config struct {
-	Address string        `config:"address"`
-	Period  time.Duration `config:"period"`
-	Queries []Query		  `config:"queries"`
+	Address  string        `config:"address"`
+	Period   time.Duration `config:"period"`
+	Queries  []Query       `config:"queries"`
+	Matchers []string      `config:"matchers"`
 }
 type Query struct {
 	Name  string `config:"name"`
