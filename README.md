@@ -9,6 +9,10 @@ Configuration is done in the `prombeat.yml` file. Example configuration:
 ```yaml
 prombeat:
   period: 15m
+  # Matchers - See https://prometheus.io/docs/operating/federation/#configuring-federation
+  matchers:
+    - http_requests_total{instance="localhost:9090",job="prometheus",method="get"}
+  # Queries - DEPRECATED
   queries:
     - name: series
       query: prometheus_local_storage_memory_series
@@ -36,8 +40,9 @@ This will result in documents like this:
         "name": "my-machine"
       },
       "labels": {
-        "__name__": "prometheus_local_storage_memory_series",
+        "__name__": "http_requests_total",
         "instance": "localhost:9090",
+        "method": "get",
         "job": "prometheus"
       },
       "series": 461390.0,
